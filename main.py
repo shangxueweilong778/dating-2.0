@@ -32,7 +32,7 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("### ⏳ 恋爱时光机")
-    start_date = st.date_input("我们在一起的那一天是？", value=date(2025, 10, 17), max_value=date.today())
+    start_date = st.date_input("我们在一起的那一天是？", value=date(2024, 10, 17), max_value=date.today())
     days_together = (date.today() - start_date).days
 
     st.markdown("---")
