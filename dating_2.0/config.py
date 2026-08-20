@@ -2,6 +2,16 @@
 """
 配置文件：存放所有静态数据、选项和 CSS 样式
 """
+import base64
+from pathlib import Path
+
+ASSETS_DIR = Path(__file__).parent / "assets"
+
+
+def gif_data_uri(filename: str) -> str:
+    """读取 assets 里的 GIF，转成 base64 data URI，方便在 HTML 中直接引用"""
+    data = (ASSETS_DIR / filename).read_bytes()
+    return f"data:image/gif;base64,{base64.b64encode(data).decode()}"
 
 # ================= 基础选项 =================
 ACTIVITY_EMOJI = ["🎮", "🎾", "💪", "🛍️", "🎬", "🌳", "✈️", "☕", "📸", "🍽️"]
@@ -43,6 +53,24 @@ html, body, [class*="css"] {
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
     animation: heartbeat 2s ease-in-out infinite;
+}
+.title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+.dog-img {
+    width: 95px;
+    height: 95px;
+    flex-shrink: 0;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(255, 143, 171, 0.35);
+    background: #ffffff;
+}
+.dog-center {
+    display: block;
+    margin: 0 auto;
 }
 @keyframes heartbeat {
     0%, 100% { transform: scale(1); }

@@ -2,7 +2,7 @@
 """
 逻辑文件：处理数据拼接，生成最终的行程 HTML 字符串
 """
-from config import TIME_BLOCKS
+from config import TIME_BLOCKS, gif_data_uri
 
 def build_summary(selections: dict, her_name: str, days_together: int) -> str:
     """
@@ -29,6 +29,7 @@ def build_summary(selections: dict, her_name: str, days_together: int) -> str:
     if days_together > 0:
         days_html = f'<p style="color:#ff4d8d; text-align:center; font-weight:bold;">✨ 这是我们相爱的第 {days_together} 天 ✨</p>'
 
+    cake_dog = gif_data_uri("cake.gif")
     html_result = f"""
     <div class="summary-card">
       <h3 style="text-align:center; color:#ff4d8d; margin-bottom:0.5rem;">💌 我们的周末甜蜜行程单 💌</h3>
@@ -37,6 +38,9 @@ def build_summary(selections: dict, her_name: str, days_together: int) -> str:
       {body}
       <p style="margin-top:1rem; border-top: 1px dashed #ffb3c6; padding-top: 0.8rem;">
         🎀 一共为你准备了 <b>{total_items}</b> 个小甜蜜！期待和你度过的每一秒 💗
+      </p>
+      <p style="text-align:center; margin:0.8rem 0 0 0;">
+        <img src="{cake_dog}" alt="举着蛋糕的小狗" style="width:100px; border-radius:18px;"/>
       </p>
     </div>
     """

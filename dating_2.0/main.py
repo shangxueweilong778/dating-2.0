@@ -19,6 +19,12 @@ st.markdown(config.CUSTOM_CSS, unsafe_allow_html=True)
 # 1. 侧边栏：获取参数
 # ==========================================
 with st.sidebar:
+    st.markdown(
+        f'<div style="text-align:center;">'
+        f'<img src="{config.gif_data_uri("call.gif")}" '
+        f'style="width:100%; max-width:180px; border-radius:18px; margin-bottom:0.5rem;"/>'
+        f'</div>',
+        unsafe_allow_html=True)
     st.markdown("## 💌 专属小设置")
     her_name = st.text_input("她的专属昵称", value="宝宝")
 
@@ -33,8 +39,16 @@ with st.sidebar:
 # ==========================================
 # 2. 主页面：核心交互 (级联菜单逻辑)
 # ==========================================
-st.markdown('<div class="title-heart">💖 专属我们的周末甜蜜计划 💖</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">亲爱的，勾选你想一起做的事，剩下的一切都交给我 💕</div>', unsafe_allow_html=True)
+st.markdown(
+    f'<div class="title-row">'
+    f'<img class="dog-img" src="{config.gif_data_uri("heart.gif")}" alt="爱心小狗"/>'
+    f'<div>'
+    f'<div class="title-heart">💖 专属我们的周末甜蜜计划 💖</div>'
+    f'<div class="subtitle">亲爱的，勾选你想一起做的事，剩下的一切都交给我 💕</div>'
+    f'</div>'
+    f'<img class="dog-img" src="{config.gif_data_uri("normal.gif")}" alt="乖乖小狗"/>'
+    f'</div>',
+    unsafe_allow_html=True)
 
 tabs = st.tabs([b["tab"] for b in config.TIME_BLOCKS])
 selections = {}
@@ -82,6 +96,12 @@ st.markdown("---")
 # ==========================================
 # 3. 提交与展示结果
 # ==========================================
+st.markdown(
+    f'<div style="text-align:center; margin-top:1rem;">'
+    f'<img class="dog-img" src="{config.gif_data_uri("jump.gif")}" alt="蹦蹦跳跳的小狗"/>'
+    f'</div>',
+    unsafe_allow_html=True)
+
 submitted = st.button("🥰 选好啦，生成我们的周末行程！", use_container_width=True)
 
 if submitted:
@@ -99,5 +119,11 @@ if st.session_state.get("summary"):
     st.markdown(st.session_state["summary"], unsafe_allow_html=True)
 
 st.markdown(
-    '<div style="text-align:center; color:#b36b84; font-size:0.8rem; margin-top:3rem;">💕 专属于你的小惊喜 · 代码由最爱你的程序员编写 💕</div>',
+    f'<div style="text-align:center; margin-top:3rem;">'
+    f'<img class="dog-img" style="width:70px; height:70px;" src="{config.gif_data_uri("walkdog.gif")}" alt="遛狗小狗"/>'
+    f'</div>',
+    unsafe_allow_html=True)
+
+st.markdown(
+    '<div style="text-align:center; color:#b36b84; font-size:0.8rem; margin-top:0.5rem;">💕 专属于你的小惊喜 · 代码由最爱你的程序员编写 💕</div>',
     unsafe_allow_html=True)
