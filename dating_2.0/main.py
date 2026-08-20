@@ -3,11 +3,13 @@
 主程序入口：页面搭建与交互逻辑
 """
 
+import json
 import streamlit as st
 from datetime import date
 # 从我们写好的模块里导入配置和逻辑
 import config
 import logic
+import notify
 
 # ==========================================
 # 0. 页面基础配置与样式
@@ -26,11 +28,11 @@ with st.sidebar:
         f'</div>',
         unsafe_allow_html=True)
     st.markdown("## 💌 专属小设置")
-    her_name = st.text_input("她的专属昵称", value="小蝴蝶")
+    her_name = st.text_input("她的专属昵称", value="宝宝")
 
     st.markdown("---")
     st.markdown("### ⏳ 恋爱时光机")
-    start_date = st.date_input("我们在一起的那一天是？", value=date(2024, 10, 17), max_value=date.today())
+    start_date = st.date_input("我们在一起的那一天是？", value=date(2023, 1, 1), max_value=date.today())
     days_together = (date.today() - start_date).days
 
     st.markdown("---")
@@ -70,7 +72,7 @@ for tab, block in zip(tabs, config.TIME_BLOCKS):
         # 吃饭的子级联菜单逻辑
         if "🍽️ 吃饭" in final_chosen:
             st.markdown("##### 👩‍🍳 关于美味的特别安排...")
-            eat_where = st.radio("想在哪儿吃呢？", ["🏠 想吃爸爸做的什么", "🏪 想请爸爸吃什么"], key=f"where_{block['name']}",
+            eat_where = st.radio("想在哪儿吃呢？", ["🏠 在家吃", "🏪 去外面"], key=f"where_{block['name']}",
                                  horizontal=True)
 
             # 根据选择动态加载 config.py 里的菜单
@@ -102,14 +104,20 @@ st.markdown(
     f'</div>',
     unsafe_allow_html=True)
 
-submitted = st.button("🥰 选这么多别把娃累死！", use_container_width=True)
+submitted = st.button("🥰 选好啦，生成我们的周末行程！", use_container_width=True)
 
 if submitted:
     if sum(len(v) for v in selections.values()) == 0:
-        st.warning("啥意思，啥也不想干？ 🥺")
+        st.warning("哎呀，还没有勾选任何项目呢～ 快去上面挑几个吧 🥺")
     else:
         # 调用 logic.py 里的生成算法
         st.session_state["summary"] = logic.build_summary(selections, her_name, days_together)
+
+        # 把她的选择推送到你的微信（同一份选择只推一次，避免重复刷屏）
+        push_key = json.dumps(selections, ensure_ascii=False, sort_keys=True) + her_name
+        if st.session_state.get("last_push_key") != push_key:
+            st.session_state["push_msg"] = notify.send_weekend_plan(selections, her_name, days_together)
+            st.session_state["last_push_key"] = push_key
 
         if "气球" in effect: st.balloons()
         if "飘雪" in effect: st.snow()
@@ -117,6 +125,10 @@ if submitted:
 # 显示结果
 if st.session_state.get("summary"):
     st.markdown(st.session_state["summary"], unsafe_allow_html=True)
+    if st.session_state.get("push_msg"):
+        st.markdown(
+            f'<div style="text-align:center; color:#b36b84; font-size:0.85rem; margin-top:0.8rem;">{st.session_state["push_msg"]}</div>',
+            unsafe_allow_html=True)
 
 st.markdown(
     f'<div style="text-align:center; margin-top:3rem;">'
